@@ -47,4 +47,10 @@ async function updateUsuario(id, data) {
   client.release();
 }
 
-export { selectUsuarios, selectUsuario, insertUsuario, deleteUsuario, updateUsuario };
+export { 
+  selectUsuarios,
+  selectUsuario,
+  insertUsuario,
+  deleteUsuario,
+  updateUsuario 
+};
