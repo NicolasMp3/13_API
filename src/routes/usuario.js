@@ -1,26 +1,13 @@
-//index.js
-import dotenv from "dotenv";
-import express from "express";
+
 import { Router } from "express";
 import { selectUsuarios, selectUsuario, insertUsuario, deleteUsuario, updateUsuario } from "./bd.js";
 
 
-dotenv.config();
 
-const app = express(); // Instancia o Express
-const port = 3000; // Define a porta
+const router = Router();
 
-app.use(express.json());
 
-app.get("/", (req, res) => {
-  console.log("Rota / solicitada");
-  // Cria a rota da raiz do projeto
-  res.json({
-    nome: "Nicolas Morais", // Substitua pelo seu nome
-  });
-});
-
-app.get("/usuarios", async (req, res) => {
+router.get("/usuarios", async (req, res) => {
   try {
     const usuarios = await selectUsuarios();
     res.json(usuarios);
@@ -31,7 +18,7 @@ app.get("/usuarios", async (req, res) => {
   console.log("Rota GET/usuarios solicitada");
 });
 
-app.get("/usuario/:id", async (req, res) => {
+router.get("/usuario/:id", async (req, res) => {
   console.log("Rota GET /usuario/# solicitada");
   try {
     const usuario = await selectUsuario(req.params.id);
@@ -42,7 +29,7 @@ app.get("/usuario/:id", async (req, res) => {
   }
 });
 
-app.post("/usuario", async (req, res) => {
+router.post("/usuario", async (req, res) => {
   console.log("Rota POST /usuario solicitada");
   try {
     await insertUsuario(req.body);
@@ -52,7 +39,7 @@ app.post("/usuario", async (req, res) => {
   }
 });
 
-app.delete("/usuario/:id", async (req, res) => {
+router.delete("/usuario/:id", async (req, res) => {
   console.log("Rota DELETE /usuario/# solicitada");
   try {
     const usuario = await selectUsuario(req.params.id);
@@ -65,7 +52,7 @@ app.delete("/usuario/:id", async (req, res) => {
   }
 });
 
-app.put("/usuario/:id", async (req, res) => {
+router.put("/usuario/:id", async (req, res) => {
   console.log("Rota PUT /usuario/# solicitada");
   try {
     const id = req.params.id;
@@ -80,7 +67,16 @@ app.put("/usuario/:id", async (req, res) => {
   }
 });
 
-app.listen(port, () => {
-  // Um socket para "escutar" as requisições
-  console.log(`Serviço escutando na porta:  ${port}`);
+
+
+router.get("/usuario", async (req, res) => {
+  console.log(`Rota GET /usuarios solicitada pelo usuario ${req.userId}`);
+  try {
+    const usuarios = await selectUsuarios();
+    res.json(usuarios);
+  } catch (error) {
+    res.status(error.status || 500).json({ message: error.message || "Erro!" });
+  }
 });
+
+export default router;

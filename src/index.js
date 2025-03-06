@@ -6,6 +6,7 @@ dotenv.config();
 const app = express();
 const port = 3000;
 
+
 app.use(express.json());
 
 app.get("/", (req, res) => {
@@ -18,18 +19,5 @@ app.listen(port, () => {
   // Um socket para "escutar" as requisições
   console.log(`Serviço escutando na porta:  ${port}`);
 });
-
-const router = Router();
-
-router.get("/usuario", async (req, res) => {
-  console.log(`Rota GET /usuarios solicitada pelo usuario ${req.userId}`);
-  try {
-    const usuarios = await selectUsuarios();
-    res.json(usuarios);
-  } catch (error) {
-    res.status(error.status || 500).json({ message: error.message || "Erro!" });
-  }
-});
-export default router;
 
 app.use(roteadorUsuario);
